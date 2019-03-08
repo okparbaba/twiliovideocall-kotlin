@@ -27,6 +27,7 @@ import com.koushikdutta.ion.Ion
 import com.twilio.video.*
 import kotlinx.android.synthetic.main.activity_video.*
 import kotlinx.android.synthetic.main.content_video.*
+import kotlinx.android.synthetic.main.videoviewtofloat.*
 import java.util.*
 
 
@@ -45,7 +46,7 @@ class VideoActivity : AppCompatActivity() {
      * Access token used to connect. This field will be set either from the console generated token
      * or the request to the token server.
      */
-    private  var accessToken: String = "eyJjdHkiOiJ0d2lsaW8tZnBhO3Y9MSIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJTS2NhZTA2ZTY4ZWIyMjFiNzZmNGZkOTA2Njc1OTMwODVjIiwiZXhwIjoxNTUyMDM5NjUyLCJqdGkiOiJTS2NhZTA2ZTY4ZWIyMjFiNzZmNGZkOTA2Njc1OTMwODVjLTE1NTIwMzYwNTIiLCJzdWIiOiJBQzQzY2VmZGQyNDg0MmNhYzBkZDlkZTY4YTk5NDg0ZTkxIiwiZ3JhbnRzIjp7ImlkZW50aXR5IjoidHNlZSIsInZpZGVvIjp7fX19.jON6Bs-4KRgDoGJQaqZhvbY1ZN747fY5Thw4P_BtWvE "
+    private  var accessToken: String = "eyJjdHkiOiJ0d2lsaW8tZnBhO3Y9MSIsInR5cCI6IkpXVCIsImFsZyI6IkhTMjU2In0.eyJpc3MiOiJTS2NhZTA2ZTY4ZWIyMjFiNzZmNGZkOTA2Njc1OTMwODVjIiwiZXhwIjoxNTUyMDQwNTQyLCJqdGkiOiJTS2NhZTA2ZTY4ZWIyMjFiNzZmNGZkOTA2Njc1OTMwODVjLTE1NTIwMzY5NDIiLCJzdWIiOiJBQzQzY2VmZGQyNDg0MmNhYzBkZDlkZTY4YTk5NDg0ZTkxIiwiZ3JhbnRzIjp7ImlkZW50aXR5IjoiYWEiLCJ2aWRlbyI6e319fQ.eySDawn3oeGZdSa3d3SHMwxF3wbyPaN9sCDBuoPr3jU "
 
     /*
      * A Room represents communication between a local participant and one or more participants.
@@ -119,7 +120,8 @@ class VideoActivity : AppCompatActivity() {
             title = room.name
 
             // Only one participant is supported
-            room.remoteParticipants?.firstOrNull()?.let { addRemoteParticipant(it) }
+            room.remoteParticipants.firstOrNull()?.let { addRemoteParticipant(it) }
+           // floatLocalVideo()
         }
 
         @SuppressLint("SetTextI18n")
@@ -658,6 +660,7 @@ class VideoActivity : AppCompatActivity() {
     /*
      * Called when participant joins the room
      */
+    @SuppressLint("SetTextI18n")
     private fun addRemoteParticipant(remoteParticipant: RemoteParticipant) {
         /*
          * This app only displays video for one additional participant per Room
@@ -748,34 +751,34 @@ class VideoActivity : AppCompatActivity() {
                     CameraCapturer.CameraSource.FRONT_CAMERA
         }
     }
-    @SuppressLint("ResourceType")
-    private fun floatLocalVideo(){
-        val layoutInflater:LayoutInflater = baseContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupVideo = layoutInflater.inflate(R.id.thumbnailVideoView,null)
-        val popupVideoHolder = PopupWindow(popupVideo,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT)
-
-        popupVideo.setOnTouchListener(object : View.OnTouchListener {
-            var orgX: Int = 0
-            var orgY: Int = 0
-            var offsetX: Int = 0
-            var offsetY: Int = 0
-
-            override fun onTouch(v: View, event: MotionEvent): Boolean {
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        orgX = event.x.toInt()
-                        orgY = event.y.toInt()
-                    }
-                    MotionEvent.ACTION_MOVE -> {
-                        offsetX = event.rawX.toInt() - orgX
-                        offsetY = event.rawY.toInt() - orgY
-                        popupVideoHolder.update(offsetX, offsetY, -1, -1, true)
-                    }
-                }
-                return true
-            }
-        })
-    }
+//    @SuppressLint("ResourceType")
+//    private fun floatLocalVideo(){
+//        val layoutInflater:LayoutInflater = baseContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+//        val popupVideo = layoutInflater.inflate(R.layout.videoviewtofloat,null)
+//        val popupVideoHolder = PopupWindow(popupVideo,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT)
+//
+//        popupVideo.setOnTouchListener(object : View.OnTouchListener {
+//            var orgX: Int = 0
+//            var orgY: Int = 0
+//            var offsetX: Int = 0
+//            var offsetY: Int = 0
+//
+//            override fun onTouch(v: View, event: MotionEvent): Boolean {
+//                when (event.action) {
+//                    MotionEvent.ACTION_DOWN -> {
+//                        orgX = event.x.toInt()
+//                        orgY = event.y.toInt()
+//                    }
+//                    MotionEvent.ACTION_MOVE -> {
+//                        offsetX = event.rawX.toInt() - orgX
+//                        offsetY = event.rawY.toInt() - orgY
+//                        popupVideoHolder.update(offsetX, offsetY, -1, -1, true)
+//                    }
+//                }
+//                return true
+//            }
+//        })
+//    }
 
     private fun connectClickListener(roomEditText: EditText): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
